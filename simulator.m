@@ -21,17 +21,18 @@ Y = sin(t)*A;
 % Plotando circunferência
 line(X, Y, 'LineWidth',2);
 grid on, box on, axis equal;
+axis([-A A -A A])
 xlabel('Vetor gerador da senóide');
 
 % Preparando objetos animados
 vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 plot_senoid = subplot(1,2,2);
 grid on, box on;
-axis([0 time_periods+1 -A A])
+axis([0 time_periods -A A])
 
 % Preparando senoide
 senoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
-legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','EastOutside');
+%legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','EastOutside');
 
 buildingSenoid = true;
 
@@ -44,7 +45,7 @@ while true
         y = A*sin(2*pi*freq*t);
 
         if(buildingSenoid)
-            addpoints(senoidAnimation, t, A*sin(2*pi*freq*t));
+            addpoints(senoidAnimation, t, y);
         end
 
         set(vector, 'XData',[0; x], 'YData',[0; y]);        % Desenha vetor girante
@@ -53,5 +54,5 @@ while true
         drawnow;
     end
     buildingSenoid = false;
-    pause(1);
+    %pause(1);
 end
