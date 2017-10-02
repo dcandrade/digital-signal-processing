@@ -5,11 +5,12 @@ movegui(hFig, 'center')
 
 % Parâmetros da senoide
 freq = 1;           % Frequência (Hz)
+fs = 20;             % Frequência de amostragem (Hz)
 A = 4;              % Amplitude
 
 % Parâmetros da Animação
-periods = 10;                       % Quantidade de perídos da onda a serem exibidos
-num_points = 100;                   % Quantidades de pontos total da senóide
+periods = 1;                       % Quantidade de perídos da onda a serem exibidos
+num_points = 1000;                   % Quantidades de pontos total da senóide
 time_periods = (1/freq) * periods;  % Cálculo do tempo total de execução
 
 % Gerando pontos da circunferência no plano (x, y)
@@ -32,6 +33,7 @@ axis([0 time_periods -A A])
 
 % Preparando senoide
 senoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
+sample = animatedline('Color',[1,0,0], 'Marker', 'o', 'LineWidth',0.5, 'LineStyle', 'none');
 %legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','EastOutside');
 
 buildingSenoid = true;
@@ -46,6 +48,9 @@ while true
 
         if(buildingSenoid)
             addpoints(senoidAnimation, t, y);
+            if( sin(2*pi*fs*t) >= 1 - fs/10000 ) %fs/100 = precisão
+                addpoints(sample, t, y);
+            end
         end
 
         set(vector, 'XData',[0; x], 'YData',[0; y]);        % Desenha vetor girante
@@ -53,6 +58,9 @@ while true
         % Refresh nos gráficos
         drawnow;
     end
+    buildingSenoid = false;
+    %pause(1);
+end end
     buildingSenoid = false;
     %pause(1);
 end
