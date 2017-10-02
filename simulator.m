@@ -9,7 +9,7 @@ sampling_freq = 6;  % Frequência de amostragem (Hz)
 A = 4;              % Amplitude
 
 % Parâmetros da Animação
-periods = 5;                        % Quantidade de perídos da onda a serem exibidos
+periods = 10;                        % Quantidade de perídos da onda a serem exibidos
 num_points = 100 * periods;         % Quantidades de pontos total da senóide
 duration = (1/freq) * periods;      % Cálculo do tempo total de execução
 sampling_T = 1/sampling_freq;
@@ -55,20 +55,21 @@ num_samples = ceil(duration/sampling_T);
 T_sample = duration/num_samples;
 x_samples = nan(num_samples, 1);
 y_samples = nan(num_samples, 1);
-next_sample = T_sample;
+next_sample = 0;
 n = 1;
 
 while true
     for t=0:duration/num_points:duration
         if ~isgraphics(hFig), return; end % Encerra se a figura foi fechada
         
-        % Atualiza coordenadas (x,y)
+        % Atualiza coordenadas (x,y) -- sin e cos estão trocados p/
+        % inverter o sentido
         x = A*sin(2*pi*freq*t);
         y = A*cos(2*pi*freq*t);
 
         if(buildingSenoid)
             addpoints(senoidAnimation, t, y);
-            if(t > next_sample)
+            if(t >= next_sample)
                 x_samples(n) = next_sample;
                 y_samples(n) = A*cos(2*pi*freq*next_sample);
                 next_sample = next_sample + T_sample;
