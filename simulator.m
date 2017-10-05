@@ -4,9 +4,9 @@ hFig = figure('Position',pos .* [1 1 1.5 0.9]);
 movegui(hFig, 'center')
 
 % Parâmetros dos sinais
-freq = 5;           % Frequência (Hz)
-sampling_freq = 6;  % Frequência de amostragem (Hz)
-A = 4;              % Amplitude
+freq = 50;           % Frequência (Hz)
+sampling_freq = 300;  % Frequência de amostragem (Hz)
+A = 1;              % Amplitude
 
 % Parâmetros da Animação
 periods = 10;                        % Quantidade de perídos da onda a serem exibidos
@@ -15,7 +15,7 @@ duration = (1/freq) * periods;      % Cálculo do tempo total de execução
 sampling_T = 1/sampling_freq;
 
 % Gerando pontos da circunferência no plano (x, y)
-plot_circle = subplot(2,2,1);
+plot_circle = subplot(3,2,1);
 t = linspace(0, 2*pi);
 X = cos(t)*A ;
 Y = sin(t)*A;
@@ -29,15 +29,17 @@ xlabel('Vetor gerador da senóide');
 vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 
 % Preparando senóide
-plot_senoid = subplot(2,2,2);
+plot_senoid = subplot(3,2,2);
 grid on, box on;
 axis([0 duration -A A]);
 senoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
+xlabel('Tempo (s)');
+ylabel(strcat('cos(2\pi *', num2str(freq), 't)'))
 %legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
-xlabel('Sinal contínuo');
+title('Sinal contínuo');
 
 % Plotando circunferência de amostragem
-plot_circle_sampling = subplot(2,2,3);
+plot_circle_sampling = subplot(3,2,3);
 axis([-A A -A A]);
 line(X, Y, 'LineWidth',2);
 grid on, box on, axis equal;
@@ -47,11 +49,22 @@ vector_sampling = line([0 0], [0 A], 'LineWidth',1);
 linkaxes([plot_circle_sampling, plot_circle], 'xy');
 
 % Plotando amostras
-plot_samples = subplot(2,2,4);
+plot_samples = subplot(3,2,4);
 samples = stem(nan,nan);
 grid on, box on;
-xlabel('Sinal amostrado');
+title('Sinal amostrado');
+xlabel('Tempo (s)');
+ylabel(strcat('cos(2\pi *', num2str(sampling_freq), 't)'));
 axis([0 duration -A A]);
+
+% Espectros
+plot_fft = subplot(3,2,5);
+sfft = plot(nan);
+grid on, box on;
+title('Espectro');
+xlabel('Frequência (Hz)');
+ylabel('|X(f)|');
+buildfft = false;
 
 buildingSenoid = true;
 num_samples = ceil(duration/sampling_T);
@@ -81,6 +94,14 @@ while true
                 set(vector_sampling, 'XData',[0; x], 'YData',[0; y]);
                 n = n + 1;
             end
+        elseif(~buildingSenoid && ~buildfft)
+            buildfft = true;
+            xdft = fft(y_samples);
+            plot(abs(xdft));
+            grid on, box on;
+            title('Espectro');
+            xlabel('Frequência (Hz)');
+            ylabel('|X(f)|');
         end
         set(vector, 'XData',[0; x], 'YData',[0; y]);        % Desenha vetor girante
         
