@@ -72,14 +72,32 @@ y_samples = nan(num_samples, 1);
 st = 0:T_sample:duration;
 sampled_signal = A*cos(2*pi*freq*st);
 X = fftshift(fft(sampled_signal));
+X_abs = abs(X);
 freq_step = sampling_freq/num_samples;
-f = -sampling_freq/2:freq_step:sampling_freq/2-freq_step;
+f_axis = -sampling_freq/2:freq_step:sampling_freq/2;
 % Plotagem do gráfico dos espectros
-plot(f, abs(X(1:end-1))/num_samples);  
+plot(f_axis, X_abs/num_samples);
 grid on, box on;
 title('Espectro do sinal amostrado');
 xlabel('Frequência (Hz)');
 ylabel('|X(f)|');
+
+% Plot info
+subplot(3,2,6);
+axis off;
+text(0, 0.9, strcat('Frequência do sinal de entrada:', num2str(freq), 'Hz'));
+text(0, 0.6, strcat('Frequência de amostragem: ', num2str(sampling_freq), 'Hz'));
+xIndex = find(X == max(X), 1, 'last');
+
+text(0, 0.3, strcat('Frequência do sinal amostrado: ', num2str(f_axis(xIndex)), 'Hz'));
+if(sampling_freq> 2*freq)
+    result = 'Sinal recuperável';
+    color = 'blue';
+else
+    result = 'Aliasing';
+    color = 'red';
+end
+text(0, 0, result, 'Color', color, 'FontSize', 15);
 
 % Loop initial conditions
 buildingSenoid = true;
