@@ -31,13 +31,13 @@ ylabel(strcat(num2str(A),'sin(2\pi *', num2str(freq), 't)'));
 vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 
 % Preparando senóide
-plot_senoid = subplot(3,2,2);
+plot_sinusoid = subplot(3,2,2);
 grid on, box on;
 axis([0 duration -A A]);
-senoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
+sinusoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
 xlabel('Tempo (s)');
 ylabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'))
-%legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
+%legend(sinusoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
 title('Sinal contínuo');
 
 % Plotando circunferência de amostragem
@@ -100,7 +100,7 @@ end
 text(0, 0, result, 'Color', color, 'FontSize', 15);
 
 % Loop initial conditions
-buildingSenoid = true;
+buildingsinusoid = true;
 next_sample = 0;
 n = 1;
 
@@ -113,8 +113,8 @@ while true
         x = A*sin(2*pi*freq*ct);
         y = A*cos(2*pi*freq*ct);
 
-        if(buildingSenoid)
-            addpoints(senoidAnimation, ct, y);
+        if(buildingsinusoid)
+            addpoints(sinusoidAnimation, ct, y);
             if(ct >= st(n))
                 set(samples,'XData', st(1:n), 'YData',sampled_signal(1:n));
                 set(vector_sampling, 'XData',[0; x], 'YData',[0; y]);
@@ -126,6 +126,6 @@ while true
         % Refresh nos gráficos
         drawnow;
     end
-    buildingSenoid = false;
+    buildingsinusoid = false;
     pause(1);
 end
