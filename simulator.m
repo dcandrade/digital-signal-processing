@@ -67,7 +67,7 @@ ylabel('|X(f)|');
 buildfft = false;
 
 buildingSenoid = true;
-num_samples = ceil(duration/sampling_T);
+num_samples = floor(duration/sampling_T);
 T_sample = duration/num_samples;
 x_samples = nan(num_samples, 1);
 y_samples = nan(num_samples, 1);
@@ -89,19 +89,18 @@ while true
                 x_samples(n) = next_sample;
                 y_samples(n) = A*cos(2*pi*freq*next_sample);
                 next_sample = next_sample + T_sample;
-                
                 set(samples,'XData', x_samples, 'YData',y_samples);
                 set(vector_sampling, 'XData',[0; x], 'YData',[0; y]);
                 n = n + 1;
             end
         elseif(~buildingSenoid && ~buildfft)
             buildfft = true;
-            xdft = fft(y_samples);
-            plot(abs(xdft));
-            grid on, box on;
-            title('Espectro');
-            xlabel('Frequência (Hz)');
-            ylabel('|X(f)|');
+            xdft = fftshift(fft(y_samples));
+            Fs = sampling_freq;
+            dt = 1/Fs;
+            dF = Fs/num_samples;
+            f = -Fs/2:dF:Fs/2-dF;
+            set(sfft, 'XData',f, 'YData',abs(xdft(1:end-1))/num_samples);        
         end
         set(vector, 'XData',[0; x], 'YData',[0; y]);        % Desenha vetor girante
         
