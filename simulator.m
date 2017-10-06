@@ -16,12 +16,12 @@ sampling_T = 1/sampling_freq;
 
 % Gerando pontos da circunferência no plano (x, y)
 plot_circle = subplot(3,2,1);
-t = linspace(0, 2*pi);
-X = cos(t)*A ;
-Y = sin(t)*A;
+ct = linspace(0, 2*pi);
+cx = cos(ct)*A ;
+X = sin(ct)*A;
 
 % Plotando circunferência contínua
-line(X, Y, 'LineWidth',2);
+line(cx, X, 'LineWidth',2);
 %axis([0 duration -A A]);
 grid on, box on, axis equal;
 axis([-A A -A A])
@@ -43,7 +43,7 @@ title('Sinal contínuo');
 % Plotando circunferência de amostragem
 plot_circle_sampling = subplot(3,2,3);
 axis([-A A -A A]);
-line(X, Y, 'LineWidth',2);
+line(cx, X, 'LineWidth',2);
 grid on, box on, axis equal;
 title('Amostragem');
 xlabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'));
@@ -63,48 +63,45 @@ axis([0 duration -A A]);
 
 % Espectros
 plot_fft = subplot(3,2,5);
-sfft = plot(nan);
-grid on, box on;
-title('Espectro');
-xlabel('Frequência (Hz)');
-ylabel('|X(f)|');
-buildfft = false;
-
-buildingSenoid = true;
+% Propriedades do sinal amostrado
 num_samples = floor(duration/sampling_T);
 T_sample = duration/num_samples;
 x_samples = nan(num_samples, 1);
 y_samples = nan(num_samples, 1);
+% Cálculo do espectro do sinal amostrado
+st = 0:T_sample:duration;
+sampled_signal = A*cos(2*pi*freq*st);
+X = fftshift(fft(sampled_signal));
+freq_step = sampling_freq/num_samples;
+f = -sampling_freq/2:freq_step:sampling_freq/2-freq_step;
+% Plotagem do gráfico dos espectros
+plot(f, abs(X(1:end-1))/num_samples);  
+grid on, box on;
+title('Espectro do sinal amostrado');
+xlabel('Frequência (Hz)');
+ylabel('|X(f)|');
+
+% Loop initial conditions
+buildingSenoid = true;
 next_sample = 0;
 n = 1;
 
 while true
-    for t=0:duration/num_points:duration
+    for ct=0:duration/num_points:duration
         if ~isgraphics(hFig), return; end % Encerra se a figura foi fechada
         
         % Atualiza coordenadas (x,y) -- sin e cos estão trocados p/
         % inverter o sentido
-        x = A*sin(2*pi*freq*t);
-        y = A*cos(2*pi*freq*t);
+        x = A*sin(2*pi*freq*ct);
+        y = A*cos(2*pi*freq*ct);
 
         if(buildingSenoid)
-            addpoints(senoidAnimation, t, y);
-            if(t >= next_sample)
-                x_samples(n) = next_sample;
-                y_samples(n) = A*cos(2*pi*freq*next_sample);
-                next_sample = next_sample + T_sample;
-                set(samples,'XData', x_samples, 'YData',y_samples);
+            addpoints(senoidAnimation, ct, y);
+            if(ct >= st(n))
+                set(samples,'XData', st(1:n), 'YData',sampled_signal(1:n));
                 set(vector_sampling, 'XData',[0; x], 'YData',[0; y]);
                 n = n + 1;
-            end
-        elseif(~buildingSenoid && ~buildfft)
-            buildfft = true;
-            xdft = fftshift(fft(y_samples));
-            Fs = sampling_freq;
-            dt = 1/Fs;
-            dF = Fs/num_samples;
-            f = -Fs/2:dF:Fs/2-dF;
-            set(sfft, 'XData',f, 'YData',abs(xdft(1:end-1))/num_samples);        
+            end  
         end
         set(vector, 'XData',[0; x], 'YData',[0; y]);        % Desenha vetor girante
         
