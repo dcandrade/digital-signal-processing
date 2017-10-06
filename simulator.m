@@ -25,7 +25,9 @@ line(X, Y, 'LineWidth',2);
 %axis([0 duration -A A]);
 grid on, box on, axis equal;
 axis([-A A -A A])
-xlabel('Vetor gerador da senóide');
+title('Vetor gerador da senóide');
+xlabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'));
+ylabel(strcat(num2str(A),'sin(2\pi *', num2str(freq), 't)'));
 vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 
 % Preparando senóide
@@ -34,7 +36,7 @@ grid on, box on;
 axis([0 duration -A A]);
 senoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
 xlabel('Tempo (s)');
-ylabel(strcat('cos(2\pi *', num2str(freq), 't)'))
+ylabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'))
 %legend(senoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
 title('Sinal contínuo');
 
@@ -43,7 +45,9 @@ plot_circle_sampling = subplot(3,2,3);
 axis([-A A -A A]);
 line(X, Y, 'LineWidth',2);
 grid on, box on, axis equal;
-xlabel('Amostragem segundo o vetor');
+title('Amostragem');
+xlabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'));
+ylabel(strcat(num2str(A),'sin(2\pi *', num2str(freq), 't)'));
 vector_sampling = line([0 0], [0 A], 'LineWidth',1);
 
 linkaxes([plot_circle_sampling, plot_circle], 'xy');
@@ -54,7 +58,7 @@ samples = stem(nan,nan);
 grid on, box on;
 title('Sinal amostrado');
 xlabel('Tempo (s)');
-ylabel(strcat('cos(2\pi *', num2str(sampling_freq), 't)'));
+ylabel(strcat(num2str(A),'cos(2\pi *', num2str(sampling_freq), 't)'));
 axis([0 duration -A A]);
 
 % Espectros
