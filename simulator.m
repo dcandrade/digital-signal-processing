@@ -4,30 +4,30 @@ hFig = figure('Position',pos .* [1 1 1.5 0.9]);
 movegui(hFig, 'center')
 
 % Parâmetros dos sinais
-freq = 50;           % Frequência (Hz)
-sampling_freq = 300;  % Frequência de amostragem (Hz)
-A = 1;              % Amplitude
+f0 = 50;                % Frequência (Hz)
+fs = 300;               % Frequência de amostragem (Hz)
+A = 1;                  % Amplitude
 
 % Parâmetros da Animação
 periods = 10;                        % Quantidade de perídos da onda a serem exibidos
 num_points = 100 * periods;         % Quantidades de pontos total da senóide
-duration = (1/freq) * periods;      % Cálculo do tempo total de execução
-sampling_T = 1/sampling_freq;
+duration = (1/f0) * periods;      % Cálculo do tempo total de execução
+Ts = 1/fs;
 
 % Gerando pontos da circunferência no plano (x, y)
 plot_circle = subplot(3,2,1);
 ct = linspace(0, 2*pi);
 cx = cos(ct)*A ;
-X = sin(ct)*A;
+cy = sin(ct)*A;
 
 % Plotando circunferência contínua
-line(cx, X, 'LineWidth',2);
+line(cx, cy, 'LineWidth',2);
 %axis([0 duration -A A]);
 grid on, box on, axis equal;
 axis([-A A -A A])
 title('Vetor gerador da senóide');
-xlabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'));
-ylabel(strcat(num2str(A),'sin(2\pi *', num2str(freq), 't)'));
+xlabel(strcat(num2str(A),'cos(2\pi *', num2str(f0), 't)'));
+ylabel(strcat(num2str(A),'sin(2\pi *', num2str(f0), 't)'));
 vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 
 % Preparando senóide
@@ -36,18 +36,18 @@ grid on, box on;
 axis([0 duration -A A]);
 sinusoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
 xlabel('Tempo (s)');
-ylabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'))
+ylabel(strcat(num2str(A),'cos(2\pi *', num2str(f0), 't)'))
 %legend(sinusoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
 title('Sinal contínuo');
 
 % Plotando circunferência de amostragem
 plot_circle_sampling = subplot(3,2,3);
 axis([-A A -A A]);
-line(cx, X, 'LineWidth',2);
+line(cx, cy, 'LineWidth',2);
 grid on, box on, axis equal;
 title('Amostragem');
-xlabel(strcat(num2str(A),'cos(2\pi *', num2str(freq), 't)'));
-ylabel(strcat(num2str(A),'sin(2\pi *', num2str(freq), 't)'));
+xlabel(strcat(num2str(A),'cos(2\pi *', num2str(f0), 't)'));
+ylabel(strcat(num2str(A),'sin(2\pi *', num2str(f0), 't)'));
 vector_sampling = line([0 0], [0 A], 'LineWidth',1);
 
 linkaxes([plot_circle_sampling, plot_circle], 'xy');
@@ -58,23 +58,23 @@ samples = stem(nan,nan);
 grid on, box on;
 title('Sinal amostrado');
 xlabel('Tempo (s)');
-ylabel(strcat(num2str(A),'cos(2\pi *', num2str(sampling_freq), 't)'));
+ylabel(strcat(num2str(A),'cos(2\pi *', num2str(fs), 't)'));
 axis([0 duration -A A]);
 
 % Espectros
 plot_fft = subplot(3,2,5);
 % Propriedades do sinal amostrado
-num_samples = floor(duration/sampling_T);
+num_samples = floor(duration/Ts);
 T_sample = duration/num_samples;
 x_samples = nan(num_samples, 1);
 y_samples = nan(num_samples, 1);
 % Cálculo do espectro do sinal amostrado
 st = 0:T_sample:duration;
-sampled_signal = A*cos(2*pi*freq*st);
-X = fftshift(fft(sampled_signal));
-X_abs = abs(X);
-freq_step = sampling_freq/num_samples;
-f_axis = -sampling_freq/2:freq_step:sampling_freq/2;
+sampled_signal = A*cos(2*pi*f0*st);
+cy = fftshift(fft(sampled_signal));
+X_abs = abs(cy);
+freq_step = fs/num_samples;
+f_axis = -fs/2:freq_step:fs/2;
 % Plotagem do gráfico dos espectros
 plot(f_axis, X_abs/num_samples);
 grid on, box on;
@@ -85,12 +85,12 @@ ylabel('|X(f)|');
 % Plot info
 subplot(3,2,6);
 axis off;
-text(0, 0.9, strcat('Frequência do sinal de entrada:', num2str(freq), 'Hz'));
-text(0, 0.6, strcat('Frequência de amostragem: ', num2str(sampling_freq), 'Hz'));
-xIndex = find(X == max(X), 1, 'last');
+text(0, 0.9, strcat('Frequência do sinal de entrada:', num2str(f0), 'Hz'));
+text(0, 0.6, strcat('Frequência de amostragem: ', num2str(fs), 'Hz'));
+xIndex = find(cy == max(cy), 1, 'last');
 
 text(0, 0.3, strcat('Frequência do sinal amostrado: ', num2str(f_axis(xIndex)), 'Hz'));
-if(sampling_freq> 2*freq)
+if(fs> 2*f0)
     result = 'Sinal recuperável';
     color = 'blue';
 else
@@ -110,8 +110,8 @@ while true
         
         % Atualiza coordenadas (x,y) -- sin e cos estão trocados p/
         % inverter o sentido
-        x = A*sin(2*pi*freq*ct);
-        y = A*cos(2*pi*freq*ct);
+        x = A*sin(2*pi*f0*ct);
+        y = A*cos(2*pi*f0*ct);
 
         if(buildingsinusoid)
             addpoints(sinusoidAnimation, ct, y);
