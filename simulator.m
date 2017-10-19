@@ -5,7 +5,7 @@ movegui(hFig, 'center')
 
 % Parâmetros dos sinais
 f0 = 50;                % Frequência (Hz)
-fs = 300;               % Frequência de amostragem (Hz)
+fs = 180;               % Frequência de amostragem (Hz)
 A = 1;                  % Amplitude
 
 % Parâmetros da Animação
@@ -34,7 +34,8 @@ vector = line(ones(1,2), ones(1,2), 'LineWidth',1);
 plot_sinusoid = subplot(3,2,2);
 grid on, box on;
 axis([0 duration -A A]);
-sinusoidAnimation = animatedline('Color',vector.Color, 'LineWidth',2);
+sinusoidAnimation = animatedline('Color',vector.Color, ...
+    'LineWidth',2);
 xlabel('Tempo (s)');
 ylabel(strcat(num2str(A),'cos(2\pi *', num2str(f0), 't)'))
 %legend(sinusoidAnimation, strcat(num2str(A),'sin(', num2str(freq), '\theta)'), 'Location','SouthOutside');
@@ -62,7 +63,7 @@ ylabel(strcat(num2str(A),'cos(2\pi *', num2str(fs), 't)'));
 axis([0 duration -A A]);
 
 % Espectros
-plot_fft = subplot(3,2,5);
+plot_fft = subplot(3,2,6);
 % Propriedades do sinal amostrado
 num_samples = floor(duration/Ts);
 T_sample = duration/num_samples;
@@ -83,7 +84,7 @@ xlabel('Frequência (Hz)');
 ylabel('|X(f)|');
 
 % Plot info
-subplot(3,2,6);
+subplot(3,2,5);
 axis off;
 text(0, 0.9, strcat('Frequência do sinal de entrada:', num2str(f0), 'Hz'));
 text(0, 0.6, strcat('Frequência de amostragem: ', num2str(fs), 'Hz'));
