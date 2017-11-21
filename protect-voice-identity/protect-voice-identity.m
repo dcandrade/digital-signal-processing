@@ -17,6 +17,7 @@ pause(duration);
 fshift = 255; % Frequência pela qual o sinal será deslocado
 NFFT = length(x);
 shiftIndex = (NFFT*fshift)/fs; %Cálculo do índice da frequência de deslocamento
+shiftIndex = mod(shiftIndex, NFFT); %Propriedade do Deslocamento Circular
 X = fft(x, NFFT);
 F = ((0:1/NFFT:1-1/NFFT)*fs)'; % Frequências de cada ponto da FFT
 X = fftshift(X); %Centralizando o componente DC no centro do espectro
