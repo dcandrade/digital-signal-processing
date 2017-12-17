@@ -21,7 +21,7 @@ xlabel('\Omega (rad)');
 ylabel('|X(e^{j\Omega})|');
 
 subplot(2,2,4);
-arg_dtft = angle(X_dtft);
+arg_dtft = wrapToPi(angle(X_dtft));
 plot(omega, arg_dtft);
 %title('Fase do sinal de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
@@ -37,7 +37,7 @@ xlabel('\Omega (rad)');
 ylabel('|X(e^{j\Omega})|');
 
 subplot(2,2,2);
-arg_dtft = angle(X_dft);
+arg_dtft = wrapToPi(angle(X_dft));
 plot(omega, arg_dtft);
 %title('Fase do sinal de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
@@ -53,7 +53,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(phase(X_dft));
+stem(wrapToPi(phase(X_dft)));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -69,7 +69,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(phase(X_dft));
+stem(wrapToPi(phase(X_dft)));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -85,7 +85,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(phase(X_dft));
+stem(wrapToPi(phase(X_dft)));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -101,7 +101,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(phase(X_dft));
+stem(wrapToPi(phase(X_dft)));
 xlabel('K');
 ylabel('arg(X[k])');
 
