@@ -1,5 +1,5 @@
 T=4; % Tamanho do pulso retangular
-t=0:1:3; % Instante de tempo considerado
+t=-10:1:13; % Instante de tempo considerado
 x=rectpuls(t-T/2,T); % Geração do pulso
 
 subplot(2,2,1);
@@ -21,7 +21,7 @@ xlabel('\Omega (rad)');
 ylabel('|X(e^{j\Omega})|');
 
 subplot(2,2,4);
-arg_dtft = wrapToPi(angle(X_dtft));
+arg_dtft = angle(X_dtft);
 plot(omega, arg_dtft);
 %title('Fase do sinal de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
@@ -33,12 +33,14 @@ subplot(2,2,1);
 omega = linspace(0, 2*pi, N);
 plot(omega,abs(X_dft));
 title('DTFT de 0 até 2\pi');
+xlim([0 2*pi])
 xlabel('\Omega (rad)');
 ylabel('|X(e^{j\Omega})|');
 
 subplot(2,2,2);
-arg_dtft = wrapToPi(angle(X_dft));
+arg_dtft = angle(X_dft);
 plot(omega, arg_dtft);
+xlim([0 2*pi])
 %title('Fase do sinal de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
 ylabel('arg(X(e^{j\Omega})');
@@ -53,7 +55,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(wrapToPi(phase(X_dft)));
+stem(angle(X_dft));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -69,7 +71,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(wrapToPi(phase(X_dft)));
+stem(angle(X_dft));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -85,7 +87,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(wrapToPi(phase(X_dft)));
+stem(angle(X_dft));
 xlabel('K');
 ylabel('arg(X[k])');
 
@@ -101,7 +103,7 @@ xlabel('K');
 ylabel('|X[k]|');
 
 subplot(2,2,4)
-stem(wrapToPi(phase(X_dft)));
+stem(angle(X_dft));
 xlabel('K');
 ylabel('arg(X[k])');
 
