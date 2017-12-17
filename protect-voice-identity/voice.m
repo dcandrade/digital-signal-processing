@@ -19,13 +19,14 @@ NFFT = length(x);
 shiftIndex = (NFFT*fshift)/fs; %Cálculo do índice da frequência de deslocamento
 shiftIndex = mod(shiftIndex, NFFT); %Propriedade do Deslocamento Circular
 X = fft(x, NFFT);
-F = ((0:1/NFFT:1-1/NFFT)*fs)'; % Frequências de cada ponto da FFT
+F = ((-1/2:1/NFFT:(1/2)-1/NFFT)*fs); % Frequências de cada ponto da FFT
 X = fftshift(X); %Centralizando o componente DC no centro do espectro
 X_shifted = [X((shiftIndex+1):end);      X(1:shiftIndex)]; %Realizando operação de deslocamento
 x_shifted = ifft(ifftshift(X_shifted),NFFT); %Colocando o sinal de volta no domínio do tempo
 
 
 %Tocando o sinal distorcido
+disp('Tocando áudio distorcido...');
 sound(real(x_shifted), fs);
 pause(duration);
 
@@ -41,4 +42,3 @@ plot(F, abs(X_shifted)/NFFT);
 title('Espectro do sinal deslocado');
 xlabel('Frequência (Hz)');
 ylabel('|X(f)|');
-
