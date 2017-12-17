@@ -4,6 +4,7 @@ x=rectpuls(t-T/2,T); % Geração do pulso
 
 subplot(2,2,1);
 stem(t, x);
+ylim([0 2])
 title('Sinal');
 xlabel('n');
 ylabel('x[n]')
