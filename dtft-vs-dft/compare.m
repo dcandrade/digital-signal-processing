@@ -19,6 +19,7 @@ subplot(3,2,3);
 omega = linspace(-2*pi, 2*pi, 2*N);
 X_dtft = [conj(X_dft) X_dft];
 plot(omega,abs(X_dtft));
+xlim([-2*pi 2*pi]);
 title('DTFT de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
 ylabel('|X(e^{j\Omega})|');
