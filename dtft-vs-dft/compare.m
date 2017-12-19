@@ -27,6 +27,7 @@ ylabel('|X(e^{j\Omega})|');
 subplot(3,2,4);
 arg_dtft = angle(X_dtft);
 plot(omega, arg_dtft);
+xlim([-2*pi 2*pi]);
 %title('Fase do sinal de -2\pi até 2\pi');
 xlabel('\Omega (rad)');
 ylabel('arg(X(e^{j\Omega})');
